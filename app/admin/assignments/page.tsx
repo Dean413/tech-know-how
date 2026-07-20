@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import CreateAssignmentForm from "@/components/admin/CreateAssignmentForm";
+import GradeSubmission from "@/components/admin/gradeSubmission";
 
 export default async function AdminAssignmentsPage() {
   const supabase = createClient();
@@ -42,23 +43,35 @@ export default async function AdminAssignmentsPage() {
                   {subs.length > 0 ? (
                     <ul className="mt-4 divide-y divide-navy-50">
                       {subs.map((s: any) => (
-                        <li key={s.id} className="flex items-center justify-between gap-4 py-2.5">
-                          <div>
-                            <p className="text-sm font-medium text-navy-800">
-                              {s.profiles?.full_name}
-                            </p>
-                            <p className="font-mono text-xs text-navy-400">
-                              {s.profiles?.matric_number}
-                            </p>
+                        <li key={s.id}>
+                          <div className="flex items-center justify-between gap-4 py-2.5">
+                            <div>
+                              <p className="text-sm font-medium text-navy-800">
+                                {s.profiles?.full_name}
+                              </p>
+                              <p className="font-mono text-xs text-navy-400">
+                                {s.profiles?.matric_number}
+                              </p>
+                            </div>
+                            <a
+                              href={s.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-sm font-medium text-brand hover:underline"
+                            >
+                              Open link →
+                            </a>
                           </div>
-                          <a
-                            href={s.link}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sm font-medium text-brand hover:underline"
-                          >
-                            Open link →
-                          </a>
+
+
+                          <div>
+                            <GradeSubmission
+                              submissionId={s.id}
+                              currentGrade={s.grade}
+                              currentFeedback={s.feedback}
+                            />
+                          </div>
+
                         </li>
                       ))}
                     </ul>

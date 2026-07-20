@@ -41,11 +41,11 @@ export default async function AdminQuizDetailPage({ params }: { params: { id: st
           <p className="eyebrow">{quiz.kind === "exam" ? "Exam" : "Quiz"}</p>
           <h1 className="mt-2 font-display text-2xl font-semibold text-navy-800">{quiz.title}</h1>
           <p className="mt-1 text-sm text-navy-500">
-            {quiz.duration_minutes} minutes · {questions?.length ?? 0}/{quiz.kind === "quiz" ? 3 : 5} questions
+            {quiz.duration_minutes} minutes · {questions?.length ?? 0}/{quiz.kind === "quiz" ? 20 : 100} questions
           </p>
         </div>
         <PublishToggle
-          shouldPublish={quiz.kind === "quiz" ? 3 : 5}
+          shouldPublish={quiz.kind === "quiz" ? 20 : 100}
           quizId={quiz.id}
           isPublished={quiz.is_published}
           questionCount={questions?.length ?? 0}
@@ -53,7 +53,7 @@ export default async function AdminQuizDetailPage({ params }: { params: { id: st
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <QuestionEditor quizTotal={quiz.kind === "quiz" ? 3 : 5} questionNo={quiz.kind === "quiz" ? 3 : 5} quizId={quiz.id} questions={questions ?? []} />
+        <QuestionEditor quizTotal={quiz.kind === "quiz" ? 20 : 100} questionNo={quiz.kind === "quiz" ? 20 : 100} quizId={quiz.id} questions={questions ?? []} />
         <AttemptsPanel quizId={quiz.id} attempts={attemptRows} />
       </div>
     </div>

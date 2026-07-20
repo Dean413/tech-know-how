@@ -11,7 +11,7 @@ export default function CreateQuizForm({ kind }: { kind: QuizKind }) {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState(kind === "quiz" ? 20 : 100);
+  const [duration, setDuration] = useState(kind === "quiz" ? 20 : 80);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -20,13 +20,24 @@ export type Assignment = {
   created_at: string;
 };
 
+// export type AssignmentSubmission = {
+//   id: string;
+//   assignment_id: string;
+//   student_id: string;
+//   link: string;
+//   submitted_at: string;
+// };
+
 export type AssignmentSubmission = {
   id: string;
   assignment_id: string;
   student_id: string;
   link: string;
   submitted_at: string;
-};
+  grade: number | null;
+  graded_at: string | null;
+  feedback: string | null;
+}
 
 export type Quiz = {
   id: string;
