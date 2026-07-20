@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "react-toastify";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -60,6 +61,8 @@ export default function SignupPage() {
         setError(signUpError.message);
         return;
       }
+      toast.success("sign up successful")
+      router.push("/login");
 
     } catch (err) {
       setError(
@@ -104,88 +107,82 @@ export default function SignupPage() {
             </Link>
           </p>
 
-          {checkEmail ? (
-            <div className="mt-8 rounded-xl border border-teal/30 bg-teal/5 p-4 text-sm text-navy-700">
-              Check <span className="font-medium">{email}</span> for a confirmation link, then
-              come back and log in.
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <div>
+              <label className="label" htmlFor="fullName">Full name</label>
+              <input
+                id="fullName"
+                className="input"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="e.g. Amina Yusuf"
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-              <div>
-                <label className="label" htmlFor="fullName">Full name</label>
-                <input
-                  id="fullName"
-                  className="input"
-                  required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Amina Yusuf"
-                />
-              </div>
-              <div>
-                <label className="label" htmlFor="email">Email address</label>
-                <input
-                  id="email"
-                  type="email"
-                  className="input"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                />
-              </div>
-              <div>
-                <label className="label" htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  className="input"
-                  required
-                  minLength={6}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
-                />
-              </div>
+            <div>
+              <label className="label" htmlFor="email">Email address</label>
+              <input
+                id="email"
+                type="email"
+                className="input"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <label className="label" htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                className="input"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+              />
+            </div>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn-primary flex w-full items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? (
-                  <>
-                    <svg
-                      className="h-5 w-5 animate-spin"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      />
-                    </svg>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary flex w-full items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="h-5 w-5 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    />
+                  </svg>
 
-                    Creating account...
-                  </>
-                ) : (
-                  "Create account"
-                )}
-              </button>
-            </form>
-          )}
+                  Creating account...
+                </>
+              ) : (
+                "Create account"
+              )}
+            </button>
+          </form>
+
         </div>
       </section>
     </main>
