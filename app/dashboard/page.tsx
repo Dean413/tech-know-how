@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import IdCard from "@/components/ui/IdCard";
 
 export default async function DashboardOverview() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();

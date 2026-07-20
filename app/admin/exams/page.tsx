@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import CreateQuizForm from "@/components/admin/CreateQuizForm";
 
 export default async function AdminExamsPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: exams } = await supabase
     .from("quizzes")
     .select("*")

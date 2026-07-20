@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminOverview() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const [{ count: students }, { count: assignments }, { count: quizzes }, { count: exams }] =
     await Promise.all([

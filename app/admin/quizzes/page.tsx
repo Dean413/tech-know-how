@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import CreateQuizForm from "@/components/admin/CreateQuizForm";
 
 export default async function AdminQuizzesPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: quizzes } = await supabase
     .from("quizzes")
     .select("*")
@@ -29,9 +29,8 @@ export default async function AdminQuizzesPage() {
                   <p className="mt-1 text-xs text-navy-400">{q.duration_minutes} minutes</p>
                 </div>
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    q.is_published ? "bg-teal/10 text-teal" : "bg-navy-50 text-navy-400"
-                  }`}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${q.is_published ? "bg-teal/10 text-teal" : "bg-navy-50 text-navy-400"
+                    }`}
                 >
                   {q.is_published ? "Published" : "Draft"}
                 </span>

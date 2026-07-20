@@ -5,7 +5,7 @@ import PublishToggle from "@/components/admin/PublishToggle";
 import AttemptsPanel from "@/components/admin/AttemptsPanel";
 
 export default async function AdminQuizDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", params.id).single();
   if (!quiz) notFound();

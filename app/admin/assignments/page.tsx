@@ -3,7 +3,7 @@ import CreateAssignmentForm from "@/components/admin/CreateAssignmentForm";
 import GradeSubmission from "@/components/admin/gradeSubmission";
 
 export default async function AdminAssignmentsPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: assignments } = await supabase
     .from("assignments")

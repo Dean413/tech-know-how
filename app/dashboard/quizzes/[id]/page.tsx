@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import QuizRunner from "@/components/QuizRunner";
 
 export default async function TakeQuizPage({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", params.id).single();
   if (!quiz || !quiz.is_published) redirect("/dashboard/quizzes");

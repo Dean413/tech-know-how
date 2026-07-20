@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminStudentsPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: students } = await supabase
     .from("profiles")

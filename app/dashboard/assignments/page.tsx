@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import AssignmentCard from "@/components/AssignmentCard";
 
 export default async function StudentAssignmentsPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
