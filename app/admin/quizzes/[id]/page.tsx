@@ -4,16 +4,17 @@ import QuestionEditor from "@/components/admin/QuestionEditor";
 import PublishToggle from "@/components/admin/PublishToggle";
 import AttemptsPanel from "@/components/admin/AttemptsPanel";
 
-export default async function AdminQuizDetailPage({ params }: { params: { id: string } }) {
+export default async function AdminQuizDetailPage({ params, }: { params: Promise<{ id: string }>; }) {
+  const { id } = await params;
   const supabase = await createClient();
 
-  const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", params.id).single();
+  const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", id).single();
   if (!quiz) notFound();
 
   const { data: questions } = await supabase
     .from("quiz_questions")
     .select("*")
-    .eq("quiz_id", params.id)
+    .eq("quiz_id", id)
     .order("position");
 
 
@@ -21,7 +22,7 @@ export default async function AdminQuizDetailPage({ params }: { params: { id: st
   const { data: attempts } = await supabase
     .from("quiz_attempts")
     .select("*, profiles(full_name, matric_number)")
-    .eq("quiz_id", params.id)
+    .eq("quiz_id", id)
     .order("submitted_at", { ascending: false });
 
   const attemptRows = (attempts ?? []).map((a: any) => ({

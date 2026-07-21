@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import CreateAssignmentForm from "@/components/admin/CreateAssignmentForm";
 import GradeSubmission from "@/components/admin/gradeSubmission";
+import AssignmentActions from "@/components/admin/assignmentAction";
 
 export default async function AdminAssignmentsPage() {
   const supabase = await createClient();
@@ -39,7 +40,7 @@ export default async function AdminAssignmentsPage() {
                       {subs.length} submission{subs.length === 1 ? "" : "s"}
                     </span>
                   </div>
-
+                  <AssignmentActions id={a.id} title={a.title} description={a.description} dueAt={a.due_at} />
                   {subs.length > 0 ? (
                     <ul className="mt-4 divide-y divide-navy-50">
                       {subs.map((s: any) => (
