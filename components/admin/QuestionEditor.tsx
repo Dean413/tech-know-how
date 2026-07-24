@@ -20,7 +20,7 @@ export default function QuestionEditor({
 }) {
   const router = useRouter();
   const supabase = createClient();
-
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,21 +28,65 @@ export default function QuestionEditor({
   const nextPosition = questions.length + 1;
   const canAddMore = questions.length < questionNo;
 
-  async function handleAdd(e: React.FormEvent) {
+  // async function handleAdd(e: React.FormEvent) {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setLoading(true);
+
+  //   const { error: insertError } = await supabase.from("quiz_questions").insert({
+  //     quiz_id: quizId,
+  //     position: nextPosition,
+  //     ...form
+  //   });
+
+  //   setLoading(false);
+
+  //   if (insertError) {
+  //     setError(insertError.message);
+  //     return;
+  //   }
+
+  //   setForm(EMPTY);
+  //   router.refresh();
+  // }
+
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+
     setError(null);
     setLoading(true);
 
-    const { error: insertError } = await supabase.from("quiz_questions").insert({
-      quiz_id: quizId,
-      position: nextPosition,
-      ...form
-    });
+    if (editingId) {
+      const { error } = await supabase
+        .from("quiz_questions")
+        .update(form)
+        .eq("id", editingId);
+
+      setLoading(false);
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      setEditingId(null);
+      setForm(EMPTY);
+      router.refresh();
+      return;
+    }
+
+    const { error } = await supabase
+      .from("quiz_questions")
+      .insert({
+        quiz_id: quizId,
+        position: nextPosition,
+        ...form,
+      });
 
     setLoading(false);
 
-    if (insertError) {
-      setError(insertError.message);
+    if (error) {
+      setError(error.message);
       return;
     }
 
@@ -63,7 +107,7 @@ export default function QuestionEditor({
         </h3>
 
         {canAddMore ? (
-          <form onSubmit={handleAdd} className="mt-4 space-y-3">
+          <form onSubmit={handleSave} className="mt-4 space-y-3">
             <textarea
               className="input"
               required
@@ -93,8 +137,27 @@ export default function QuestionEditor({
             <p className="text-xs text-navy-400">Select the radio button next to the correct option.</p>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? "Adding…" : "Add question"}
+              {loading
+                ? editingId
+                  ? "Updating..."
+                  : "Adding..."
+                : editingId
+                  ? "Update Question"
+                  : "Add Question"}
             </button>
+
+            {editingId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingId(null);
+                  setForm(EMPTY);
+                }}
+                className="ml-3 rounded border px-4 py-2"
+              >
+                Cancel
+              </button>
+            )}
           </form>
         ) : (
           <p className="mt-3 text-sm text-teal">All {quizTotal} questions are in — ready to publish.</p>
@@ -110,12 +173,46 @@ export default function QuestionEditor({
                 <p className="text-sm font-medium text-navy-800">
                   {q.position}. {q.question}
                 </p>
-                <button
+                {/* <button
                   onClick={() => handleDelete(q.id)}
                   className="shrink-0 text-xs font-medium text-red-500 hover:underline"
                 >
                   Remove
-                </button>
+                </button> */}
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(q.id);
+
+                      setForm({
+                        question: q.question,
+                        option_a: q.option_a,
+                        option_b: q.option_b,
+                        option_c: q.option_c,
+                        option_d: q.option_d,
+                        correct_option: q.correct_option,
+                      });
+
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }}
+                    className="text-xs font-medium text-blue-600 hover:underline"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(q.id)}
+                    className="text-xs font-medium text-red-500 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
               <ul className="mt-2 grid grid-cols-1 gap-1 text-sm text-navy-500 sm:grid-cols-2">
                 {(["a", "b", "c", "d"] as const).map((key) => (

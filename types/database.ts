@@ -136,6 +136,19 @@ export interface Database {
       };
     };
     Views: {};
+    // Functions: {
+    //   start_quiz_attempt: { Args: { p_quiz_id: string }; Returns: QuizAttempt };
+    //   get_quiz_questions: {
+    //     Args: { p_quiz_id: string };
+    //     Returns: Omit<QuizQuestion, "correct_option">[];
+    //   };
+    //   submit_quiz_attempt: {
+    //     Args: { p_quiz_id: string; p_answers: { question_id: string; selected_option: OptionKey | null }[] };
+    //     Returns: QuizAttempt;
+    //   };
+    //   release_quiz_results: { Args: { p_quiz_id: string }; Returns: undefined };
+    // };
+
     Functions: {
       start_quiz_attempt: { Args: { p_quiz_id: string }; Returns: QuizAttempt };
       get_quiz_questions: {
@@ -147,6 +160,20 @@ export interface Database {
         Returns: QuizAttempt;
       };
       release_quiz_results: { Args: { p_quiz_id: string }; Returns: undefined };
+      get_quiz_review: {
+        Args: { p_quiz_id: string };
+        Returns: {
+          question_id: string;
+          position: number;
+          question: string;
+          option_a: string;
+          option_b: string;
+          option_c: string;
+          option_d: string;
+          correct_option: OptionKey;
+          selected_option: OptionKey | null;
+        }[];
+      };
     };
   };
 };

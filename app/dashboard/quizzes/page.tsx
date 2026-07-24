@@ -51,13 +51,29 @@ export default async function StudentQuizzesPage() {
                   )}
                 </div>
 
-                {completed ? (
+                {/* {completed ? (
                   <span className="rounded-full bg-navy-50 px-4 py-2 text-sm font-medium text-navy-400">
                     Completed
                   </span>
                 ) : (
                   <Link href={`/dashboard/quizzes/${quiz.id}`} className="btn-primary">
                     Start quiz
+                  </Link>
+                )} */}
+
+                {completed && (
+                  <p className="mt-2 text-sm font-medium text-teal">
+                    {attempt?.released
+                      ? `Score: ${attempt.score}/${attempt.total}`
+                      : "Submitted — awaiting results"}
+                  </p>
+                )}
+                {completed && attempt?.released && (
+                  <Link
+                    href={`/dashboard/quizzes/${quiz.id}/review`}
+                    className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
+                  >
+                    Review answers →
                   </Link>
                 )}
               </div>

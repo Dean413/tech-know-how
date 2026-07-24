@@ -47,33 +47,39 @@ export default function AttemptsPanel({ quizId, attempts }: { quizId: string; at
       {submitted.length > 0 ? (
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="text-xs uppercase tracking-wide text-navy-400">
-              <th className="pb-2">Student</th>
-              <th className="pb-2">Matric No.</th>
-              <th className="pb-2">Score</th>
-              <th className="pb-2">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-navy-50">
-            {submitted.map((a) => (
-              <tr key={a.id}>
-                <td className="py-2 text-navy-800">{a.student_name}</td>
-                <td className="py-2 font-mono text-navy-500">{a.matric_number}</td>
-                <td className="py-2 font-medium text-navy-800">{a.score}/{a.total}</td>
-                <td className="py-2">
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      a.released ? "bg-teal/10 text-teal" : "bg-navy-50 text-navy-400"
-                    }`}
-                  >
-                    {a.released ? "Released" : "Held"}
-                  </span>
-                </td>
+            <thead>
+              <tr className="text-xs uppercase tracking-wide text-navy-400">
+                <th className="pb-2">Student</th>
+                <th className="pb-2">Matric No.</th>
+                <th className="pb-2">Score</th>
+                <th className="pb-2">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-navy-50">
+              {submitted.map((a) => (
+                <tr key={a.id}>
+                  <td className="py-2 text-navy-800">
+                    <button
+                      onClick={() => router.push(`/admin/quizzes/${quizId}/attempts/${a.id}`)}
+                      className="hover:underline text-blue-600"
+                    >
+                      {a.student_name}
+                    </button>
+                  </td>
+                  <td className="py-2 font-mono text-navy-500">{a.matric_number}</td>
+                  <td className="py-2 font-medium text-navy-800">{a.score}/{a.total}</td>
+                  <td className="py-2">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${a.released ? "bg-teal/10 text-teal" : "bg-navy-50 text-navy-400"
+                        }`}
+                    >
+                      {a.released ? "Released" : "Held"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
         <p className="mt-3 text-sm text-navy-400">No submissions yet.</p>
