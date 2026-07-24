@@ -2,14 +2,14 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import QuizRunner from "@/components/QuizRunner";
 
-export default async function TakeQuizPage({ params }: { params: { id: string } }) {
+export default async function TakeQuizPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient();
-
-  const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", params.id).single();
+  const { id } = await params
+  const { data: quiz } = await supabase.from("quizzes").select("*").eq("id", id).single();
   if (!quiz || !quiz.is_published) redirect("/dashboard/quizzes");
 
   const { data: attempt, error } = await supabase.rpc("start_quiz_attempt", {
-    p_quiz_id: params.id
+    p_quiz_id: id
   });
 
   if (error || !attempt) redirect("/dashboard/quizzes");
